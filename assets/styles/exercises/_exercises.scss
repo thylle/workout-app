@@ -1,0 +1,17 @@
+
+.add-exercise{
+    &__container{
+
+
+        .el-input-group__prepend{
+            width: 130px;
+        }
+    }
+
+    &__trigger{
+        position: fixed;
+        bottom: $default-spacing;
+        right: $default-spacing;
+    }
+}
+

@@ -1,0 +1,30 @@
+$default-spacing: 20px;
+
+*{
+    box-sizing: border-box;
+}
+
+body{
+    max-width: 480px;
+    margin: 0 auto;
+}
+
+.status{
+
+    &__container{
+        position: fixed;
+        top:0; bottom:0;
+        left:0; right:0;
+        background: #fff;
+    }
+
+    &__content{
+        position: absolute;
+        top: 50%;
+        left: 0;
+        transform: translateY(-50%);
+        width: 100%;
+        padding: 0 $default-spacing*2;
+        text-align: center;
+    }
+}
