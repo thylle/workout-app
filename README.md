@@ -1,6 +1,6 @@
 # workout-app
 
-> Nuxt.js project with firebase API
+> Nuxt.js project with firebase API niceness
 
 ## Build Setup
 
