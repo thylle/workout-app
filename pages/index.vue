@@ -1,89 +1,125 @@
 <template>
-  <el-container>
-    <header class="el-header">
-      <h1 class="h1 pt2">Workouts</h1>
+  <div class="app-container">
+    <!-- TODO: Add font for design -->
+    <!-- <link href="https://fonts.googleapis.com/css?family=Nunito:300,400,700" rel="stylesheet">     -->
+
+    <header class="main-header">
+      <div class="container">
+        <h1 class="main-header__title">Workouts</h1>
+        <p class="main-header__byline">A list of all your workouts</p>
+        <button class="link" v-on:click="addWorkoutActive = true">Create new workout</button>
+      </div>
     </header>
 
-    <main class="el-main">
+    <main v-if="currentUser">
+      <div class="container">
 
-      <!-- Add workout -->
-      <el-row class="mb3">
-        <form v-on:submit.prevent="addWorkout()">
-          <el-input placeholder="Name your new workout" v-model="newWorkoutName">
-            <el-button slot="append" icon="el-icon-plus" v-on:click="addWorkout(newWorkoutName)">Create workout</el-button>
-          </el-input>
-        </form>
-      </el-row>
+        <!-- Add workout dialog -->
+        <el-dialog title="Your new workout" width="90%" v-bind:visible.sync="addWorkoutActive">
+          <form v-on:submit.prevent="addWorkout()">
+            <input class="form-control mb-3" placeholder="Name your new workout" v-model="newWorkoutName" />
 
-      <!-- Add exercise container -->
-      <el-row class="add-exercise__container  mb3" v-if="addExerciseActive">
-        <p class="h2">Your new exercise</p>
-
-        <form v-on:submit.prevent="addExercise()">
-          <el-input class="mb2" placeholder="Name your exercise" v-model="newExercise.name"></el-input>
-          <el-input class="mb2" type="textarea" placeholder="Make a note to the exercise" v-model="newExercise.notes"></el-input>
-          
-          <!-- Option list of workouts -->
-          <el-select class="mb2" v-model="newExercise.workoutKey" placeholder="Select workout">
-            <el-option
-              v-for="item in workouts"
-              v-if="item.name"
-              :key="item.key"
-              :label="item.name"
-              :value="item.key">
-            </el-option>
-          </el-select>
-
-          <el-input class="mb2" type="number" v-model="newExercise.weight" v-bind:min="0">
-            <template slot="prepend">Weight in kg</template>
-          </el-input>
-          <el-input class="mb2" type="number" v-model="newExercise.sets" v-bind:min="0">
-            <template slot="prepend" style="width: 300px">Sets</template>
-          </el-input>
-          <el-input class="mb2" type="number" v-model="newExercise.reps" v-bind:min="0">
-            <template slot="prepend">Reps</template>
-          </el-input>
-          <el-input class="mb2" type="number" v-model="newExercise.rest" v-bind:min="0">
-            <template slot="prepend">Rest in sec</template>
-          </el-input>
-
-          <el-button icon="el-icon-add" v-on:click="addExercise()">Create exercise</el-button>
-        </form>
-      </el-row>
+            <div class="text-right  dialog-footer">
+                <button class="btn mr-3" type="button" @click="addWorkoutActive = false">Cancel</button>
+                <button class="btn btn-success">Create workout</button>
+              </div>
+          </form>
+        </el-dialog>
 
 
-      <!-- Workout list -->
-      <div class="el-card box-card mb3" v-for="item in sortedWorkouts" v-bind:key="item.key" v-if="item.name">
-        <div class="el-card__header flex items-center justify-between">
-          <h2 class="m0">{{item.name}}</h2>
-          <!-- <el-button type="text" v-on:click="addExercise('Curls', item.key)">+ Tilføj øvelse</el-button> -->
+        <!-- Add exercise dialog -->
+        <el-dialog title="Your new exercise" width="90%" v-bind:visible.sync="addExerciseActive">
+          <form v-on:submit.prevent="addExercise()">
+            <input class="form-control  mb-2" placeholder="Name your exercise" v-model="newExercise.name" />
+            <textarea class="form-control  mb-3" placeholder="Make a note to the exercise" v-model="newExercise.notes" />
+            
+            <!-- Option list of workouts -->
+            <div>
+              <label>Choose workout </label>
+              <button class="float-right link" type="button" tabindex="-1" v-on:click="addWorkoutActive = true">Create new workout</button>
+            </div>
+            
+            <select class="form-control  mb-3" v-model="newExercise.workoutKey">
+              <option
+                v-for="item in workouts"
+                v-if="item.name"
+                :key="item.key"
+                :label="item.name"
+                :value="item.key">
+              </option>
+            </select>
+
+            <label>Weight in kg</label>
+            <input class="form-control  mb-3" placeholder="How much weight" type="number" v-model="newExercise.weight" v-bind:min="0" />
+              
+            <label>Sets</label>
+            <input class="form-control  mb-3" placeholder="How many sets" type="number" v-model="newExercise.sets" v-bind:min="0" />
+
+            <label>Reps</label>
+            <input class="form-control  mb-3" placeholder="Number of reps" type="number" v-model="newExercise.reps" v-bind:min="0" />
+
+            <label>Rest in sec</label>
+            <input class="form-control  mb-3" placeholder="Rest in seconds" type="number" v-model="newExercise.rest" v-bind:min="0" />
+
+            <div class="text-right  dialog-footer">
+              <button class="btn mr-3" type="button" @click="addExerciseActive = false">Cancel</button>
+              <button class="btn btn-success">Create exercise</button>
+            </div>
+          </form>
+        </el-dialog>
+
+
+        <!-- Workout list -->
+        <div class="card mb-3" v-for="item in workouts" v-bind:key="item.key" v-if="item.name">
+          <div class="card-header">
+            <h2 class="h5 float-left m-0">{{item.name}}</h2>
+            <button class="link float-right" type="text" v-on:click="addExerciseForWorkout(item)">Add exercise</button>
+          </div>
+          <div class="card-body  ">
+            <div class="text item  exercise" v-for="child in item.exercises" v-bind:key="child.key">
+              <p class="exercise__title"><strong>{{child.details.name}}</strong></p>
+
+              <div class="row">
+                <div class="col  exercise__detail">
+                  <span class="exercise__detail-value">{{child.details.weight}}</span>
+                  <span class="exercise__detail-label">kg</span>
+                </div>
+                <div class="col  exercise__detail">
+                  <span class="exercise__detail-value">{{child.details.sets}}</span>
+                  <span class="exercise__detail-label">sets</span>
+                </div>
+                <div class="col  exercise__detail">
+                  <span class="exercise__detail-value">{{child.details.reps}}</span>
+                  <span class="exercise__detail-label">reps</span>
+                </div>
+                <div class="col  exercise__detail">
+                  <span class="exercise__detail-value">{{child.details.rest}}</span>
+                  <span class="exercise__detail-label">rest in sec</span>
+                </div>    
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="el-card__body">
-          <ul>
-            <li v-for="child in item.exercises" v-bind:key="child.key" class="text item">
-              {{child.details.name}}
-            </li>
-          </ul>
-        </div>
+
       </div>
     </main>
 
-    <el-footer>
-      <!-- <p>{{currentUser}}</p> -->
-    </el-footer>
+    <nav class="nav-bar">
+      <button class="nav-bar__item">Exercises</button>
+      <button class="nav-bar__item">Workouts</button>
+      <button class="nav-bar__item  nav-bar__item--highlight" v-on:click="addExerciseActive = !addExerciseActive">Add Exercise</button>
+    </nav>
 
-    <!-- Button to toggle "add exercise" container -->
-    <el-button class="add-exercise__trigger" type="success" icon="el-icon-plus" v-on:click="addExerciseActive = !addExerciseActive"></el-button>
-    
+
     <!-- Status container for loading and errors -->
     <div class="status__container" v-if="status.loading || status.error">
       <div class="status__content">
         <strong>{{status.title}}</strong>
       </div>
     </div>
-
-  </el-container>
+  </div>
 </template>
+
 
 <script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script>
 <script>
@@ -101,13 +137,13 @@ export default {
         error: false,
         title: "Loading..."
       },
-      currentUser: null,
-      workouts: [],
       newWorkoutName: null,
+      addWorkoutActive: false,
       addExerciseActive: false,
-      newExercise: {},
+      newExercise: {}
     };
   },
+
   components: {
     AppLogo
   },
@@ -117,19 +153,35 @@ export default {
     if (!firebase.apps.length) {
       this.initFirebase();
     }
+  },
+
+  mounted(){
+    //TODO add LS name to config
+    let localStorageName = "LS-current-user";
+    let localStorageCurrentUser = JSON.parse(localStorage.getItem(localStorageName)) || null;
+
+    // if(localStorageCurrentUser == null){
+    //   console.log("localStorageCurrentUser", localStorageCurrentUser);
+      
+    //   //Add the current user to the store
+    //   this.$store.commit('SET_CURRENTUSER', localStorageCurrentUser)
+
+    //   this.status.loading = false;
+    // }
+    // else{
+    //   this.getCurrentUser();
+    // }
 
     this.getCurrentUser();
   },
 
   computed: {
-    sortedWorkouts() {
-      let sortedItems = this.workouts.sort(function(a, b) {
-        // Turn your strings into dates, and then subtract them
-        // to get a value that is either negative, positive, or zero.
-        return new Date(b.created) - new Date(a.created);
-      });
+    currentUser() {
+      return this.$store.getters.currentUser;
+    },
 
-      return sortedItems;
+    workouts() {
+      return this.$store.getters.workoutsSorted;
     }
   },
 
@@ -161,39 +213,25 @@ export default {
 
       ref.once("value", data => {
         if (data.val() != null) {
-          console.log(data.val());
+          let currentUser = data.val();
+          let workoutsAsArray = [];
 
-          this.currentUser = data.val();
+          //Change workouts list to an array
+          for(let item in currentUser.workouts){
+            workoutsAsArray.push(currentUser.workouts[item]);
+          }
+          currentUser.workouts = workoutsAsArray;
+
+          //Add the current user to the store
+          console.log("SET_CURRENTUSER", currentUser);
+          this.$store.commit('SET_CURRENTUSER', currentUser)
+
           this.status.loading = false;
-
-          //Get workout data for the current user
-          this.getWorkoutData();
-
-        } else {
+        } 
+        else {
           this.status.loading = false;
           this.status.error = true;
           this.status.title = "No user found";
-        }
-      });
-    },
-
-    getWorkoutData() {
-      console.log("get workout data...");
-
-      let ref = firebase
-        .database()
-        .ref("users/" + this.currentUser.key + "/workouts/");
-
-      ref.once("value", data => {
-        if (data.val() != null) {
-          data.forEach(item => {
-            //let array = this.workouts;
-            let newItem = item.val();
-            //array.indexOf(newItem) === -1 ? array.push(newItem) : console.log("This item already exists");
-            this.workouts.push(newItem);
-          });
-        } else {
-          //TODO: No data
         }
       });
     },
@@ -205,8 +243,9 @@ export default {
       API.addWorkout(this.currentUser, this.newWorkoutName)
         .then(result => {
           //Add the new item to the store and empty the input field
-          this.workouts.push(result);
+          this.$store.commit('ADD_WORKOUT', result);
           this.newWorkoutName = null;
+          this.addWorkoutActive = false;
 
           setTimeout(() => {
             this.status.loading = false;
@@ -222,6 +261,11 @@ export default {
         this.newExercise = {};
         this.addExerciseActive = false;
       });
+    },
+
+    addExerciseForWorkout(workout){
+      this.addExerciseActive = true;
+      this.newExercise.workoutKey = workout.key;
     }
   }
 };
