@@ -7,11 +7,29 @@
             width: 130px;
         }
     }
-
-    &__trigger{
-        position: fixed;
-        bottom: $default-spacing;
-        right: $default-spacing;
-    }
 }
 
+
+.exercise{
+    margin-bottom: $default-spacing;
+    padding-bottom: $default-spacing/2;
+    border-bottom: 1px solid $gray-300;
+
+    &__title{
+        margin-bottom: $default-spacing/2;
+    }
+
+    &__detail{
+        text-align: center;
+        line-height: 1em;
+
+        &-value{
+            display: block;
+            margin-bottom: $default-spacing/2;
+        }
+
+        &-label{
+            display: block;
+        }
+    }
+}
