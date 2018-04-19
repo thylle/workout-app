@@ -1,13 +1,81 @@
-$default-spacing: 20px;
+@import "_custom-variables.scss";
 
 *{
     box-sizing: border-box;
 }
 
 body{
+    overflow-y: scroll;
+    padding-bottom: $nav-bar-height;
+}
+
+.container{
     max-width: 480px;
     margin: 0 auto;
 }
+
+.link{
+    padding: 0;
+    cursor: pointer;
+    color: $primary;
+    text-decoration: underline;
+    border: 0;
+    background: transparent;
+    
+
+    &:focus{
+        outline: none;
+    }
+}
+
+.main-header{
+    margin-bottom: $default-spacing;
+    padding: $default-spacing $default-spacing;
+    //background: $gray-100;
+
+    &__title{
+        margin: 0;
+        font-size: $h1-font-size;
+    }
+
+    &__byline{
+        margin: 0;
+        color: $body-color-muted;
+    }
+}
+
+.nav-bar{
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    color: $secondary-bg-text-color;
+    background: $secondary;
+
+    &__item{
+        flex-grow: 1;
+        height: $nav-bar-height;
+        padding: 0 $default-spacing/2;
+        color: inherit;
+        border: 0;
+        border-left: 1px solid lighten($secondary,10%);
+        cursor: pointer;
+        background: transparent;
+
+        &:first-child{
+            border-left: 0;
+        }
+
+        &--highlight{
+            flex-grow: 2;
+            border: 0;
+            background: $success;
+        }
+    }
+}
+
 
 .status{
 

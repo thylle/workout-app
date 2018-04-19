@@ -37,9 +37,6 @@ module.exports = {
   },
 
   css: [
-    'normalize.css/normalize.css',
-    'basscss/css/basscss.min.css',
-    'element-ui/lib/theme-chalk/reset.css',
     'element-ui/lib/theme-chalk/index.css',
     '@/assets/styles/main.scss'
   ],
