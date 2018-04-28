@@ -14,6 +14,12 @@ module.exports = {
     ]
   },
   /*
+  ** Router setup for Github pages
+  */
+  router: {
+    base: '/workout-app/'
+  },
+  /*
   ** Customize the progress bar color
   */
   loading: { color: '#3B8070' },
@@ -35,6 +41,8 @@ module.exports = {
       }
     }
   },
+
+    
 
   css: [
     'element-ui/lib/theme-chalk/index.css',
