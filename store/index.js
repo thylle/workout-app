@@ -1,14 +1,24 @@
+import Vue from 'vue';
 import Vuex from 'vuex'
 
-const createStore = () => {
+let createStore = () => {
   return new Vuex.Store({
     state: {
+      status: {
+        loading: true,
+        error: false,
+        title: "Loading..."
+      },
       currentUser: {
         workouts: null
       },
     },
 
     getters: {
+      status: state => {
+        return state.status;
+      },
+
       currentUser: state => {
         return state.currentUser;
       },
@@ -18,8 +28,6 @@ const createStore = () => {
 
         if(workouts){
           let sortedItems = workouts.sort(function(a, b) {
-            // Turn your strings into dates, and then subtract them
-            // to get a value that is either negative, positive, or zero.
             return new Date(b.created) - new Date(a.created);
           });
 
@@ -40,9 +48,9 @@ const createStore = () => {
         localStorage.setItem(localStorageName, JSON.stringify(user));
       },
 
-      ADD_WORKOUT(state, workout) {
-        state.currentUser.workouts.push(workout);
-      }
+      ADD_WORKOUT(state, item) {
+        state.currentUser.workouts.push(item);
+      },
     }
   })
 }
