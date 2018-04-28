@@ -17,7 +17,7 @@ module.exports = {
   ** Router setup for Github pages
   */
   router: {
-    base: '/workout-app/'
+    base: '/workout-app/dist'
   },
   /*
   ** Customize the progress bar color
