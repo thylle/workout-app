@@ -45,5 +45,9 @@ module.exports = {
 
   plugins: [
     '@/plugins/element-ui'
-  ]
+  ],
+
+  modules: [
+    '@nuxtjs/pwa',
+  ],
 }
