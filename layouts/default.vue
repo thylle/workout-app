@@ -7,13 +7,13 @@
     <nuxt/>
 
     <!-- Add exercise dialog -->
-    <add-exercise-dialog v-bind:addExerciseValues.sync="addExerciseValues"></add-exercise-dialog>
+    <add-exercise-dialog></add-exercise-dialog>
 
     <!-- Global nav bar -->
     <nav class="nav-bar">
-      <button class="nav-bar__item">Exercises</button>
-      <button class="nav-bar__item">Workouts</button>
-      <button class="nav-bar__item  nav-bar__item--highlight" v-on:click="addExerciseValues.active = !addExerciseValues.active">Add Exercise</button>
+      <nuxt-link class="nav-bar__item" to="/exercises">Exercises</nuxt-link>
+      <nuxt-link class="nav-bar__item" to="/workouts">Workouts</nuxt-link>
+      <button class="nav-bar__item  nav-bar__item--highlight" v-on:click="openNewExerciseDialog()">Add Exercise</button>
     </nav>
 
     <!-- Status container for loading and errors -->
@@ -27,22 +27,16 @@
   </div>
 </template>
 
-<script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script>
-
 <script>
 import AddExerciseDialog from "~/components/AddExerciseDialog.vue";
-import firebase from "firebase";
 import APIService from "~/services/api-service.js";
+
 const API = new APIService();
 
 export default {
-  data() {
-    return {
-      addExerciseValues: {
-        active: false,
-        workoutKey: null
-      }
-    };
+
+  components: {
+    AddExerciseDialog
   },
 
   computed: {
@@ -54,50 +48,13 @@ export default {
     },
   },
 
-  created() {
-    // Initialize Firebase if the firebase app does not exist
-    if (!firebase.apps.length) {
-      this.initFirebase();
-    }
-  },
-
   mounted(){
     //Waiting for mounted beacuse localstorage is not defined at "created"
-    this.useOfflineData();
-    //API.getCurrentUserData(this.$store);
-  },
-
-  components: {
-    AddExerciseDialog
-  },
-  
-  computed: {
-    status(){
-      return this.$store.getters.status;
-    }
+    //this.useOfflineData();
+    API.getCurrentUserData(this.$store);
   },
 
   methods: {
-    initFirebase() {
-      const config = {
-        apiKey: "AIzaSyCxUwMWfGsYMufqOiF4LaRTmDXYYxM6EwE",
-        authDomain: "workout-app-1337.firebaseapp.com",
-        databaseURL: "https://workout-app-1337.firebaseio.com",
-        projectId: "workout-app-1337",
-        storageBucket: "workout-app-1337.appspot.com",
-        messagingSenderId: "995650046193"
-      };
-
-      firebase.initializeApp(config);
-
-      // firebase.auth().onAuthStateChanged(function(user) {
-      //   if (user) {
-      //     // User is signed in and currentUser will no longer return null.
-      //   } else {
-      //     // No user is signed in.
-      //   }
-      // });
-    },
 
     useOfflineData(){
       //TODO add LS name to config
@@ -115,7 +72,11 @@ export default {
       else{
         API.getCurrentUserData(this.$store);
       }
-    }
+    },
+
+    openNewExerciseDialog(){
+      this.$store.commit('OPEN_NEW_EXERCISE_DIALOG', null)
+    },
   }
 }
 </script>
