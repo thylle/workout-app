@@ -21,8 +21,13 @@
               </option>
           </select>
 
+          <label>Image</label>
+          <!-- <input type="file"  :name="uploadFieldName" :disabled="isSaving" @change="filesChange($event.target.name, $event.target.files); fileCount = $event.target.files.length" accept="image/*" class="input-file"> -->
+          <!-- <input class="form-control  mb-3" placeholder="Upload a image of the exercise" type="file" multiple  v-bind:name="newExerciseImage" @change="filesChange($event.target.name, $event.target.files); fileCount = $event.target.files.length" accept="image/*"/> -->
+          <input class="form-control  mb-3" placeholder="Upload a image of the exercise" type="file" multiple @change="fileChange($event);" accept="image/*"/>
+          
           <label>Weight in kg</label>
-          <input class="form-control  mb-3" placeholder="How much weight" type="number" v-model="newExercise.weight" v-bind:min="0" />
+          <input class="form-control  mb-3" placeholder="How much weight" type="number" v-model="newExercise.weight" step=".5" v-bind:min="0" />
               
           <label>Sets</label>
           <input class="form-control  mb-3" placeholder="How many sets" type="number" v-model="newExercise.sets" v-bind:min="0" />
@@ -55,9 +60,10 @@ export default {
     };
   },
 
-  props: ["addExerciseValues"],
-
   computed: {
+    addExerciseValues() {
+      return this.$store.getters.addExerciseValues;
+    },
     currentUser() {
       return this.$store.getters.currentUser;
     },
@@ -67,15 +73,31 @@ export default {
   },
 
   methods: {
-    closeDialog(){
-      this.addExerciseValues.active = false;
+    closeDialog() {
+      this.$store.commit('CLOSE_NEW_EXERCISE_DIALOG')
     },
+
+    fileChange(event) {
+      const files = event.target.files;
+      this.newExercise.images = [];
+
+      // if (!fileList.length) return;
+
+      // append the files to the images array
+      Array.from(Array(files.length).keys()).map(x => {
+        let newName = (+new Date()) + '-' + files[x].name;
+        this.newExercise.images.push({name: newName, file: files[x]});
+      });
+
+      console.log("this.newExercise.images", this.newExercise.images);
+    },
+
     addExercise() {
       this.newExercise.workoutKey = this.addExerciseValues.workoutKey;
 
-      API.addExercise(this.currentUser, this.newExercise).then((newItem) => {
+      API.addExercise(this.currentUser, this.newExercise).then(newItem => {
         this.newExercise = {};
-        this.closeDialog()
+        this.closeDialog();
 
         //TODO: add new item to store or get data from firebase again...
         API.getCurrentUserData(this.$store);
