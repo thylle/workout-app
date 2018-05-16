@@ -10,11 +10,8 @@
       </div>
     </header>
 
-    <nuxt-link :to="'/user/'+2">workout link</nuxt-link>
-    <nuxt-child :key="$route.params.id"/>
 
-    <main v-if="currentUser">
-      <div class="container">
+    <main class="container" v-if="currentUser">
 
         <!-- Add workout dialog -->
         <el-dialog title="Your new workout" width="90%" v-bind:visible.sync="addWorkoutActive">
@@ -22,9 +19,9 @@
             <input ref='workoutName' class="form-control mb-3" placeholder="Name your new workout" v-model="newWorkoutName" />
 
             <div class="text-right  dialog-footer">
-                <button class="btn mr-3" type="button" @click="addWorkoutActive = false">Cancel</button>
-                <button class="btn btn-success">Create workout</button>
-              </div>
+              <button class="btn mr-3" type="button" @click="addWorkoutActive = false">Cancel</button>
+              <button class="btn btn-success">Create workout</button>
+            </div>
           </form>
         </el-dialog>
 
@@ -34,9 +31,11 @@
             <h2 class="h5 float-left m-0">{{item.name}}</h2>
             <button class="link float-right" type="text" v-on:click="addExerciseForWorkout(item)">Add exercise</button>
           </div>
-          <div class="card-body">
+          <nuxt-link :to="'/workouts/'+ item.key" class="card-body">
             <p class="mb-1" v-html="exerciseCountText(item.exercises)"></p>
             <p class="m-0">Last workout: </p>
+
+            <!-- <img v-for="image in item.exercises[0].details.images" v-bind:src="image.src" v-bind:alt="item.name" v-bind:key="image.name"/> -->
 
             <!-- <div class="text item  exercise" v-for="child in item.exercises" v-bind:key="child.key">
               <p class="exercise__title"><strong>{{child.details.name}}</strong></p>
@@ -60,10 +59,8 @@
                 </div>    
               </div>
             </div> -->
-          </div>
+          </nuxt-link>
         </div>
-
-      </div>
     </main>
   </div>
 </template>
@@ -75,7 +72,7 @@ const API = new APIService();
 
 export default {
   transition(to, from) {
-    if (from && from.name === "user-id") return 'slide-right'
+    if (from && from.name === "workouts-id") return 'slide-right' 
     return 'slide-left'    
   },
   
@@ -129,8 +126,7 @@ export default {
     },
 
     addExerciseForWorkout(workout){
-      this.addExerciseValues.active = true;
-      this.addExerciseValues.workoutKey = workout.key;
+      this.$store.commit('OPEN_NEW_EXERCISE_DIALOG', workout.key)
     },
 
     exerciseCountText(exercises){

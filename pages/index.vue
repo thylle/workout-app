@@ -10,7 +10,7 @@
 
     <main>
       <div class="container">
-        <p><nuxt-link to="/user">Login med facebook</nuxt-link></p>
+        <p><nuxt-link to="/workouts">Workouts</nuxt-link></p>
       </div>
     </main>
   </div>
