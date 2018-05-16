@@ -1,11 +1,12 @@
 import Vue from 'vue'
-import firebase from "firebase";
+import { Database } from '@/services/fireinit.js'
+
 
 export default class APIService {
-
+  
   getCurrentUserData(store) {
     console.log("get current user...");
-    let ref = firebase.database().ref("users/1337");
+    let ref = Database.ref("users/1337");
 
     ref.once("value", data => {
 
@@ -42,7 +43,7 @@ export default class APIService {
   addWorkout(user, name) {
     return new Promise((resolve, reject) => {
       let refName = "users/" + user.key + "/workouts";
-      let ref = firebase.database().ref(refName).push();
+      let ref = Database.ref(refName).push();
       let newItem = {
         key: ref.key,
         name: name,
@@ -62,30 +63,53 @@ export default class APIService {
   addExercise(user, newExercise) {
     let workoutKey = newExercise.workoutKey ? newExercise.workoutKey : "no-workout";
     let refName = "users/" + user.key + "/workouts/" + workoutKey + "/exercises";
-    let ref = firebase.database().ref(refName).push();
+    let ref = Database.ref(refName).push();
+    let images = newExercise.images;
 
     let newItem = {
       key: ref.key,
       created: new Date().toString(),
       workoutKey: workoutKey,
-      details: newExercise      
+      details: newExercise
     }
 
     return new Promise((resolve, reject) => {
-      this.addToDB(ref, newItem).then((result) => {
-        resolve(result);
-      }).catch((e) => {
-        reject(e);
-      });
+
+      if(images){
+        console.log("Start uploading images....");
+        let image = images[0];
+        let storageRef = firebase.storage().ref();
+        let name = image.name;
+        let file = image.file;
+        
+        //Upload file
+        storageRef.child(name).put(file).then((snapshot) => {
+          console.log("uploaded image src: ", snapshot.downloadURL);
+          newItem.details.images[0].src = snapshot.downloadURL;
+
+          this.addToDB(ref, newItem).then((result) => {
+            resolve(result);
+          }).catch((e) => {
+            reject(e);
+          });
+        });
+      }
+      else{
+        this.addToDB(ref, newItem).then((result) => {
+          resolve(result);
+        }).catch((e) => {
+          reject(e);
+        });
+      }
     });
   }
 
-
+  //Add data to firebase database
   addToDB(ref, newItem) {
     return new Promise((resolve, reject) => {
       ref.set(newItem).then(() => {
-        ref.once('value').then((snap) => {
-          let newItem = snap.val();
+        ref.once('value').then((snapshot) => {
+          let newItem = snapshot.val();
 
           console.log("new item added...", newItem);
 
