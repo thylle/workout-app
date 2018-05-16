@@ -12,6 +12,11 @@ let createStore = () => {
       currentUser: {
         workouts: null
       },
+      currentWorkout: null,
+      addExerciseValues:{
+        active: false,
+        workoutKey: null
+      }
     },
 
     getters: {
@@ -19,8 +24,16 @@ let createStore = () => {
         return state.status;
       },
 
+      addExerciseValues: state => {
+        return state.addExerciseValues;
+      },
+
       currentUser: state => {
         return state.currentUser;
+      },
+
+      currentWorkout: state => {
+        return state.currentWorkout;
       },
 
       workoutsSorted: state => {
@@ -48,8 +61,23 @@ let createStore = () => {
         localStorage.setItem(localStorageName, JSON.stringify(user));
       },
 
+      SET_CURRENT_WORKOUT(state, workoutKey){
+        let currentWorkout = state.currentUser.workouts.find(x => x.key === workoutKey);
+        state.currentWorkout = currentWorkout;
+      },
+
       ADD_WORKOUT(state, item) {
         state.currentUser.workouts.push(item);
+      },
+
+      OPEN_NEW_EXERCISE_DIALOG(state, workoutKey) {
+        state.addExerciseValues.active = true;
+        state.addExerciseValues.workoutKey = workoutKey;
+      },
+
+      CLOSE_NEW_EXERCISE_DIALOG(state) {
+        state.addExerciseValues.active = false;
+        state.addExerciseValues.workoutKey = null;
       },
     }
   })
