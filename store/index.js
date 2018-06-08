@@ -1,5 +1,6 @@
 import Vue from 'vue';
-import Vuex from 'vuex'
+import Vuex from 'vuex';
+import firebase, {Auth, GoogleProvider} from '@/services/firebase-service.js';
 
 let createStore = () => {
   return new Vuex.Store({
@@ -9,6 +10,7 @@ let createStore = () => {
         error: false,
         title: "Loading..."
       },
+      user: null,
       currentUser: {
         workouts: null
       },
@@ -22,6 +24,10 @@ let createStore = () => {
     getters: {
       status: state => {
         return state.status;
+      },
+
+      activeUser: (state, getters) => {
+        return state.user
       },
 
       addExerciseValues: state => {
@@ -52,6 +58,10 @@ let createStore = () => {
     },
 
     mutations: {
+      setUser (state, payload) {
+        state.user = payload
+      },
+
       SET_CURRENTUSER(state, user) {
         let localStorageName = "LS-current-user";
 
@@ -79,6 +89,26 @@ let createStore = () => {
         state.addExerciseValues.active = false;
         state.addExerciseValues.workoutKey = null;
       },
+    },
+
+    actions: {
+      autoSignIn ({commit}, payload) {
+        commit('setUser', payload)
+      },
+
+      signInWithGoogle ({commit}) {
+        return new Promise((resolve, reject) => {
+          Auth.signInWithRedirect(GoogleProvider)
+          resolve()
+        })
+      },
+
+      signOut ({commit}) {
+        Auth.signOut().then(() => {
+          commit('setUser', null)
+          this.$router.push('/')
+        }).catch(err => console.log(error))
+      }
     }
   })
 }

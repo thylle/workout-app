@@ -140,5 +140,5 @@ export default {
       return text + count;
     }
   }
-  }
+}
 </script>

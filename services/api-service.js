@@ -1,11 +1,10 @@
 import Vue from 'vue'
-import { Database } from '@/services/fireinit.js'
+import { Database } from '@/services/firebase-service.js'
 
 
 export default class APIService {
   
-  getCurrentUserData(store) {
-    console.log("get current user...");
+  getCurrentUserData(store, user) {
     let ref = Database.ref("users/1337");
 
     ref.once("value", data => {
@@ -13,6 +12,8 @@ export default class APIService {
       if (data.val() != null) {
         let currentUser = data.val();
         let workoutsAsArray = [];
+
+        console.log("getCurrentUserData", currentUser);
 
         //Change workouts and exercises lists to arrays - so that we can work with arrays instead of objects
         if(currentUser.workouts){

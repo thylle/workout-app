@@ -36,14 +36,18 @@ module.exports = {
     }
   },
 
-    
+  router: {
+    middleware: 'router-auth'
+  },
+
+  mode: 'spa',
 
   css: [
-    'element-ui/lib/theme-chalk/index.css',
     '@/assets/styles/main.scss'
   ],
 
   plugins: [
+    '@/plugins/auth',
     '@/plugins/element-ui'
   ],
 

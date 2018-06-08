@@ -10,10 +10,11 @@
     <add-exercise-dialog></add-exercise-dialog>
 
     <!-- Global nav bar -->
-    <nav class="nav-bar">
+    <nav class="nav-bar" v-if="user">
       <nuxt-link class="nav-bar__item" to="/exercises">Exercises</nuxt-link>
       <nuxt-link class="nav-bar__item" to="/workouts">Workouts</nuxt-link>
       <button class="nav-bar__item  nav-bar__item--highlight" v-on:click="openNewExerciseDialog()">Add Exercise</button>
+      <button class="" @click="logout">logout</button>
     </nav>
 
     <!-- Status container for loading and errors -->
@@ -43,6 +44,9 @@ export default {
     status(){
       return this.$store.getters.status;
     },
+    user () {
+      return this.$store.getters.activeUser
+    },
     currentUser() {
       return this.$store.getters.currentUser;
     },
@@ -51,10 +55,22 @@ export default {
   mounted(){
     //Waiting for mounted beacuse localstorage is not defined at "created"
     //this.useOfflineData();
-    API.getCurrentUserData(this.$store);
+
+    if(this.user){
+      //App is ready and the user is authenticated so we get some data for that user
+      API.getCurrentUserData(this.$store, this.user)
+    }
+    else{
+      //App is ready and no user found - so we just hide the loading and show the frontpage for the user to login...
+      this.$store.state.status.loading = false
+    }
+    
   },
 
   methods: {
+    logout () {
+      this.$store.dispatch('signOut')
+    },
 
     useOfflineData(){
       //TODO add LS name to config
