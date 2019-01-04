@@ -43,12 +43,14 @@ module.exports = {
   mode: 'spa',
 
   css: [
+    'element-ui/lib/theme-chalk/index.css', 
     '@/assets/styles/main.scss'
   ],
 
   plugins: [
     '@/plugins/auth',
-    '@/plugins/element-ui'
+    '@/plugins/element-ui',
+    '@/plugins/filters'    
   ],
 
   modules: [

@@ -1,7 +1,8 @@
 <template>
-  <div>
-    <!-- TODO: Add font for design -->
-    <!-- <link href="https://fonts.googleapis.com/css?family=Nunito:300,400,700" rel="stylesheet">     -->
+  <div class="wrapper">
+    <nav class="header-nav" v-if="user">
+      <button class="header-nav__button" @click="routeBack"><span class="icon icon-chevron-left"></span></button>
+    </nav>
 
     <!-- Views will render here -->
     <nuxt/>
@@ -11,10 +12,24 @@
 
     <!-- Global nav bar -->
     <nav class="nav-bar" v-if="user">
-      <nuxt-link class="nav-bar__item" to="/exercises">Exercises</nuxt-link>
-      <nuxt-link class="nav-bar__item" to="/workouts">Workouts</nuxt-link>
-      <button class="nav-bar__item  nav-bar__item--highlight" v-on:click="openNewExerciseDialog()">Add Exercise</button>
-      <button class="" @click="logout">logout</button>
+      <button class="nav-bar__item" @click="logout">
+        <span class="icon icon-equalizer"></span>
+        <!-- <span>logout</span> -->
+      </button>
+      <nuxt-link class="nav-bar__item" to="/exercises">
+        <span class="icon icon-dumbbell"></span>
+        <!-- <span>Exercises</span> -->
+      </nuxt-link>
+
+      <nuxt-link class="nav-bar__item" to="/workouts">
+        <span class="icon icon-list4"></span>
+        <!-- <span>Workouts</span> -->
+      </nuxt-link>
+      
+      <button class="nav-bar__item  nav-bar__item--highlight" v-on:click="openNewExerciseDialog()">
+        <span class="icon icon-plus"></span>
+        <!-- <span>Add workout</span> -->
+      </button>
     </nav>
 
     <!-- Status container for loading and errors -->
@@ -49,7 +64,7 @@ export default {
     },
     currentUser() {
       return this.$store.getters.currentUser;
-    },
+    }
   },
 
   mounted(){
@@ -70,6 +85,10 @@ export default {
   methods: {
     logout () {
       this.$store.dispatch('signOut')
+    },
+
+    routeBack(){
+      history.back();
     },
 
     useOfflineData(){

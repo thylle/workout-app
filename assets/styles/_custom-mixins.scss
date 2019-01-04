@@ -1,0 +1,133 @@
+@import "_custom-variables.scss";
+
+
+@mixin clearfix() {
+    &:after {
+        display: block;
+        clear: both;
+        content: "";
+    }
+}
+
+
+@mixin equal-height-row() {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+@mixin align-vertically() {
+    display: flex;
+    align-items: center;
+}
+
+@mixin transition-std($target: all, $ease: ease-in-out, $duration: $animation-duration-std, $delay: 0ms) {
+    -webkit-transition: $target $ease $duration $delay;
+    -o-transition: $target $ease $duration $delay;
+    transition: $target $ease $duration $delay;
+}
+
+@mixin box-shadow{
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+
+@mixin icon-arrow-right{
+    font-family: 'icomoon';
+    content: "\e93c";
+}
+
+
+// (min) Breakpoints
+@mixin breakpoint($name) {
+    $lg: "(min-width: " + $breakpoint-lg + ")";
+    $ipad-landscape: "(min-width: " + $breakpoint-ipad-landscape + ")";
+    $md: "(min-width: " + $breakpoint-md + ")";
+    $sm: "(min-width: " + $breakpoint-sm + ")";
+    $xs: "(min-width: " + $breakpoint-xs + ")";
+    $xxs: "(min-width: " + $breakpoint-xxs + ")";
+
+    @if $name == lg {
+        @media #{$lg} {
+            @content;
+        }
+    }
+    @else if $name == ipad-landscape {
+        @media #{$ipad-landscape} {
+            @content;
+        }
+    }
+    @else if $name == md {
+        @media #{$md} {
+            @content;
+        }
+    }
+    @else if $name == sm {
+        @media #{$sm} {
+            @content;
+        }
+    }
+    @else if $name == xs {
+        @media #{$xs} {
+            @content;
+        }
+    }
+    @else if $name == xxs {
+        @media #{$xxs} {
+            @content;
+        }
+    }
+}
+
+// (max) Breakpoints
+@mixin breakpoint-max($name) {
+    $lg: "(max-width: " + ($breakpoint-lg - 1px) + ")";
+    $ipad-landscape: "(max-width: " + ($breakpoint-ipad-landscape - 1px) + ")";
+    $md: "(max-width: " + ($breakpoint-md - 1px) + ")";
+    $sm: "(max-width: " + ($breakpoint-sm - 1px) + ")";
+    $xs: "(max-width: " + ($breakpoint-xs - 1px) + ")";
+    $xxs: "(max-width: " + ($breakpoint-xxs - 1px) + ")";
+
+    @if $name == lg {
+        @media #{$lg} {
+            @content;
+        }
+    }
+    @else if $name == ipad-landscape {
+        @media #{$ipad-landscape} {
+            @content;
+        }
+    }
+    @else if $name == md {
+        @media #{$md} {
+            @content;
+        }
+    }
+    @else if $name == sm {
+        @media #{$sm} {
+            @content;
+        }
+    }
+    @else if $name == xs {
+        @media #{$xs} {
+            @content;
+        }
+    }
+    @else if $name == xxs {
+        @media #{$xxs} {
+            @content;
+        }
+    }
+}
+
+@mixin font-size($font-size) {
+  font-size: $font-size * $font-size-base;
+}
+
+@mixin no-select() {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}

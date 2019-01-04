@@ -5,8 +5,18 @@
 }
 
 body{
-    overflow-y: scroll;
-    overflow-x: hidden;
+    
+    //Background color in the top of the app
+    &:before{
+        content: "";
+        z-index: -1;
+        position: absolute;
+        top:0;
+        left:0;
+        width: 100%;
+        height: $header-height + ($default-spacing*4);
+        background: $primary;
+    }
 }
 
 .container{
@@ -16,28 +26,58 @@ body{
 
 .page-container{
     min-height: 100vh;
-    padding-bottom: $nav-bar-height;
     transition: all .5s cubic-bezier(.55,0,.1,1);
+    padding-bottom: $header-nav-height*1.5;
 }
 
-.link{
-    padding: 0;
-    cursor: pointer;
-    color: $primary;
-    text-decoration: underline;
-    border: 0;
-    background: transparent;
-    
 
-    &:focus{
+.header-nav{
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: $header-nav-height;
+    padding: $default-spacing/2 $default-spacing/2 0;
+    text-align: left;
+    justify-content: space-between;
+
+    &__button{
+        position: relative;
+        display: block;
+        width: 50px;
+        height: 50px;
+        padding: 0;
+        color: $white;
+        border: 0;
+        font-size: $icon-size;
+        line-height: 1em;
+        cursor: pointer;
+        background: transparent;
         outline: none;
+
+        &:nth-child(1){
+            .icon{
+                float: left;
+            }
+        }
+
+        .icon{
+            float: right;
+        }
+
+        &:focus{
+            outline: none;
+        }
     }
 }
 
 .main-header{
-    margin-bottom: $default-spacing;
-    padding: $default-spacing 0;
-    //background: $gray-100;
+    height: $header-height;
+    padding: $header-nav-height 0;
+    text-align: center;
+    color: $white;
 
     &__title{
         margin: 0;
@@ -45,10 +85,12 @@ body{
     }
 
     &__byline{
-        margin: 0;
-        color: $body-color-muted;
+        opacity: 0.8;
+        margin-bottom: $default-spacing;
     }
 }
+
+
 
 .nav-bar{
     display: flex;
@@ -56,35 +98,47 @@ body{
     bottom: 0;
     left: 0;
     width: 100%;
-    color: $secondary-bg-text-color;
-    background: $secondary;
+    color: $gray-700;
+    border-top: 1px solid $gray-300;
+    background: rgba($white, 0.9);
 
     &__item{
-        display: inline-block;
+        display: flex;
+        flex-direction: column;
         flex-grow: 1;
-        padding: $nav-bar-height/2 $default-spacing/2;
-        line-height: 0;
+        justify-content: center;
+        align-items: center;
+        height: $nav-bar-height;
+        padding: 0 $default-spacing/2;
+        line-height: 1em;
+        font-size: $icon-size;
         text-align: center;
         color: inherit;
         border: 0;
-        border-left: 1px solid lighten($secondary,10%);
         cursor: pointer;
         background: transparent;
 
         &:hover,
         &:focus{
-            color: inherit;
+            color: $secondary;
             text-decoration: none;
         }
 
-        &:first-child{
-            border-left: 0;
+        &--highlight{
+            // flex-grow: 2;
+            // color: $white;
+            // background: $success;
+
+            // &:hover,
+            // &:focus{
+            //     color: $white;
+            //     text-decoration: none;
+            //     background: darken($success, 5%);
+            // }
         }
 
-        &--highlight{
-            flex-grow: 2;
-            border: 0;
-            background: $success;
+        span{
+            display: block;
         }
     }
 }

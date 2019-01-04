@@ -1,18 +1,35 @@
 $default-spacing:                       20px;
+$header-nav-height:                     60px;
+$header-height:                         260px;
 $nav-bar-height:                        65px;
+$icon-size:                             22px;
 
 
-$primary:                               #f63854;
+$white:                                 #fff;
+$gray-100:                              #f8f9fa;
+$gray-200:                              #e9ecef;
+$gray-300:                              #dee2e6;
+$gray-400:                              #ced4da;
+$gray-500:                              #adb5bd;
+$gray-600:                              #6c757d;
+$gray-700:                              #495057;
+$gray-800:                              #343a40;
+$gray-900:                              #212529;
+$black:                                 #1E0C10;
+
+$primary:                               #031d5b;
 $primary-bg-text-color:                 #fff;
 
-$secondary:                             #031d5b;
+$secondary:                             #f63854;
+$secondary-light:                       lighten($secondary, 30%);
 $secondary-bg-text-color:               #fff;
 $secondary-dark:                        #232838;
 $secondary-dark-bg-text-color:          rgba(255,255,255,0.8);
 
 $body-bg:                               $white;
-$body-color:                            #2b2b2b;
-$body-color-muted:                      lighten($body-color, 30%);
+$body-color:                            $black;
+$body-color-muted:                      $gray-900;
+$link-color:                            $secondary;
 $input-placeholder-color:               $gray-500;
 
 
@@ -28,5 +45,8 @@ $h3-font-size:                $font-size-base * 1.75 !default;
 $h4-font-size:                $font-size-base * 1.5 !default;
 $h5-font-size:                $font-size-base * 1.25 !default;
 $h6-font-size:                $font-size-base !default;
+
+
+
 
 

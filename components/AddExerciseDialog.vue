@@ -8,7 +8,7 @@
           <!-- Option list of workouts -->
           <div>
             <label>Choose workout </label>
-            <button class="float-right link" type="button" tabindex="-1" v-on:click="addWorkoutActive = true">Create new workout</button>
+            <add-workout></add-workout>
           </div>
           
           <select class="form-control  mb-3" v-model="addExerciseValues.workoutKey">
@@ -48,6 +48,7 @@
 </template>
 
 <script>
+import AddWorkout from "~/components/AddWorkout.vue";
 import APIService from "~/services/api-service.js";
 const API = new APIService();
 
@@ -58,6 +59,10 @@ export default {
       addWorkoutActive: false,
       newExercise: {}
     };
+  },
+
+  components: {
+    AddWorkout
   },
 
   computed: {

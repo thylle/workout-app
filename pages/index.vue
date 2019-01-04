@@ -1,17 +1,15 @@
 <template>
   <div class="page-container">
-
     <header class="main-header">
       <div class="container">
-        <h1 class="main-header__title">Login</h1>
-        <p class="main-header__byline">Login to see your workouts</p>
+        <h1 class="main-header__title">Join us</h1>
+        <p class="main-header__byline">Join thousands of iron lifting souls and reach your goals with a easy workout tracker</p>
+        <button class="btn btn-secondary" @click="googleSignUp">Sign in with Google</button>
       </div>
     </header>
 
-    <main>
-      <div class="container">
-        <button class="btn btn-primary" @click="googleSignUp">Sign in with Google</button>
-      </div>
+    <main class="container  main-content">
+      
     </main>
   </div>
 </template>
